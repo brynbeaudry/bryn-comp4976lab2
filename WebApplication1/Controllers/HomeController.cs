@@ -48,9 +48,10 @@ namespace WebApplication1.Controllers
             return View(Files);
         }
 
-        public ActionResult TextFile(string filename)
+        public ActionResult TextFile(int id)
         {
-            var files = Directory.GetFiles(Server.MapPath("~/TextFiles"), "*" + filename + ".txt");
+
+            var files = Directory.GetFiles(Server.MapPath("~/TextFiles"), String.Format("file{0}.txt", id));
             var file = files[0];
             var f = new Model.File
             {
