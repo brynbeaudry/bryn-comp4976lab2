@@ -1,0 +1,11 @@
+﻿@model WebApplication1.Model.File
+
+@{
+    ViewBag.Title = "TextFile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.FileName</h2>
+<ul>
+        <li><p>@Model.Content</p></li>
+</ul>

@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using WebApplication1.Models;
 
@@ -25,15 +28,36 @@ namespace WebApplication1.Controllers
             string[] files = Directory.GetFiles(Server.MapPath("~/TextFiles"));
             FileList Files = new FileList();
 
+
             foreach (var file in files)
             {
+                
+                var fn = Path.GetFileName(file);
+                Match match = Regex.Match(fn, @"(\d+)");
+                var number = int.Parse(match.Groups[1].Value);
                 var f = new Model.File {
-                    text = file
-                };
+                    Text = file,
+                    RelativePath = "/TextFiles/" + fn,
+                    FileName = fn,
+                    Url = "./TextFile/" + number,
+                    Number = number
+            };
                 Files.Add(f);
             }
 
             return View(Files);
+        }
+
+        public ActionResult TextFile(string filename)
+        {
+            var files = Directory.GetFiles(Server.MapPath("~/TextFiles"), "*" + filename + ".txt");
+            var file = files[0];
+            var f = new Model.File
+            {
+                Content = System.IO.File.ReadAllText(file),
+                FileName = Path.GetFileName(file)
+            };
+            return View(f);
         }
 
         public ActionResult Contact()
