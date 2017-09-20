@@ -32,14 +32,14 @@ namespace WebApplication1.Controllers
             foreach (var file in files)
             {
                 
-                var fn = Path.GetFileName(file);
+                var fn = Path.GetFileNameWithoutExtension(file);
                 Match match = Regex.Match(fn, @"(\d+)");
                 var number = int.Parse(match.Groups[1].Value);
                 var f = new Model.File {
                     Text = file,
                     RelativePath = "/TextFiles/" + fn,
                     FileName = fn,
-                    Url = "./TextFile/" + number,
+                    Url = "./TextFile/" + fn,
                     Number = number
             };
                 Files.Add(f);
@@ -48,10 +48,10 @@ namespace WebApplication1.Controllers
             return View(Files);
         }
 
-        public ActionResult TextFile(int id)
+        public ActionResult TextFile(string name)
         {
 
-            var files = Directory.GetFiles(Server.MapPath("~/TextFiles"), String.Format("file{0}.txt", id));
+            var files = Directory.GetFiles(Server.MapPath("~/TextFiles"), String.Format("*{0}.txt", name));
             var file = files[0];
             var f = new Model.File
             {
